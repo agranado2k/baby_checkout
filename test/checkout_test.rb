@@ -1,5 +1,21 @@
 require "minitest/autorun"
 
+class Checkout
+  attr_accessor :items
+
+  def initialize(promotional_rules)
+    @items = []
+  end
+
+  def scan(item)
+    items.push(item)
+  end
+
+  def total
+    items.reduce(0){|sum, item| sum + item[:value]}
+  end
+end
+
 class CheckoutTest < Minitest::Test
   DB_ITEMS = {
     "001" => {id: "001", name: "Lavender heart", value: 9.25},
@@ -8,6 +24,25 @@ class CheckoutTest < Minitest::Test
   }
 
 
+  def test_checkout_without_promotional_rules_with_1_item
+    item = {id: "001", name: "Lavender heart", value: 9.25}
+    co = Checkout.new(nil)
+
+    co.scan(item)
+
+    assert_equal co.total, 9.25
+  end
+
+  def test_checkout_without_promotional_rules_with_2_item
+    item_1 = {id: "001", name: "Lavender heart", value: 9.25}
+    item_2 = {id: "002", name: "Personalised cufflinks", value: 45.00}
+    co = Checkout.new(nil)
+
+    co.scan(item_1)
+    co.scan(item_2)
+
+    assert_equal co.total, 54.25
+  end
 
   def test_acceptance_testing_case_1
     skip
