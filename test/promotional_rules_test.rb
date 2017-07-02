@@ -1,5 +1,4 @@
-require "minitest/autorun"
-require_relative "../lib/promotional_rules"
+require "test_helper"
 
 class PromotionalRulesTest < Minitest::Test
   def test_promotional_rules_for_items

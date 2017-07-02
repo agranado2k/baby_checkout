@@ -1,5 +1,4 @@
-require "minitest/autorun"
-require_relative "../lib/checkout"
+require "test_helper"
 
 def create_promotional_rules
   prs = PromotionalRules.new
