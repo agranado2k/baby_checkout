@@ -18,7 +18,13 @@ class Checkout
   end
 
   def apply_promotional_rules_to_items
-    pr ? pr.update_item_value_by_rules(items) : items
+    if pr
+      items.each do |item| 
+        quantity = items.select{|i|i[:id] == item[:id]}.size
+        item = pr.update_item_value_by_rules(item, quantity) 
+      end
+    end
+    items
   end
 
   def pre_calculate_total

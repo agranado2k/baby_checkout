@@ -2,9 +2,10 @@ require "minitest/autorun"
 require_relative "../lib/checkout"
 
 def create_promotional_rules
-  prs = [{rule: "basket", type: "percentage", property: "value", value_over: 60, discount: 10},
-         {rule: "item", type: "absolute", property: "quantity", item_id: "001", quantity_over: 2, discount: 0.75}]
-  PromotionalRules.new(prs)
+  prs = PromotionalRules.new
+  prs.include_rule({rule: "basket", type: "percentage", property: "value", value_over: 60, discount: 10})
+  prs.include_rule({rule: "item", type: "absolute", property: "quantity", item_id: "001", quantity_over: 2, discount: 0.75})
+  prs
 end
 
 def include_basket_items_to_checkout(checkout, basket)
@@ -46,7 +47,8 @@ class CheckoutTest < Minitest::Test
   def test_checkout_with_basket_promotional_rule
     item_1 = {id: "002", name: "Personalised cufflinks", value: 45.00}
     item_2 = {id: "003", name: "Kids T-shirt", value: 19.95}
-    promotional_rules = PromotionalRules.new([{rule: "basket", type: "percentage", property: "value", value_over: 60, discount: 10}])
+    promotional_rules = PromotionalRules.new
+    promotional_rules.include_rule({rule: "basket", type: "percentage", property: "value", value_over: 60, discount: 10})
     co = Checkout.new(promotional_rules)
 
     co.scan(item_1)
@@ -58,7 +60,8 @@ class CheckoutTest < Minitest::Test
   def test_checkout_with_item_promotional_rule
     item_1 = {id: "001", name: "Lavender heart", value: 9.25}
     item_2 = {id: "001", name: "Lavender heart", value: 9.25}
-    promotional_rules = PromotionalRules.new([{rule: "item", type: "absolute", property: "quantity", item_id: "001", quantity_over: 2, discount: 0.75}])
+    promotional_rules = PromotionalRules.new
+    promotional_rules.include_rule({rule: "item", type: "absolute", property: "quantity", item_id: "001", quantity_over: 2, discount: 0.75})
     co = Checkout.new(promotional_rules)
 
     co.scan(item_1)
