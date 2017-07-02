@@ -1,11 +1,11 @@
 require_relative "./promotional_rules"
 
 class Checkout
-  attr_accessor :items, :to_remove_this_promotional_rules, :promotional_rule
+  attr_accessor :items, :pr
 
   def initialize(pr = nil)
     @items = []
-    @promotional_rule = pr
+    @pr = pr
   end
 
   def scan(item)
@@ -13,10 +13,19 @@ class Checkout
   end
 
   def total
-    @items = promotional_rule.update_item_value_by_rules(items) if promotional_rule
-    total = items.reduce(0){|sum, item| sum + item[:value]}
-    total = promotional_rule.update_basket_value_by_rules(total) if promotional_rule
+    @items = apply_promotional_rules_to_items
+    apply_promotional_rules_to_basket(pre_calculate_total)
+  end
 
-    total
+  def apply_promotional_rules_to_items
+    pr ? pr.update_item_value_by_rules(items) : items
+  end
+
+  def pre_calculate_total
+    items.reduce(0){|sum, item| sum + item[:value]}
+  end
+
+  def apply_promotional_rules_to_basket(total)
+    pr ? pr.update_basket_value_by_rules(total) : total
   end
 end
