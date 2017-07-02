@@ -9,9 +9,9 @@ class PromotionalRulesTest < Minitest::Test
     prs.include_rule({rule: "basket", type: "percentage", property: "value", value_over: 60, discount: 10})
     prs.include_rule({rule: "item", type: "absolute", property: "quantity", item_id: "001", quantity_over: 2, discount: 0.75})
 
-    item_after_rule = prs.update_item_value_by_rules(items.first, items.size)
+    value_after_rule = prs.update_item_value_by_rules(items.first[:value], items.size, items.first[:id])
 
-    assert_equal item_after_rule, {id: "001", name: "Lavender heart", value: 8.50}
+    assert_equal value_after_rule, 8.50
   end
 
   def test_promotional_rules_for_basket
