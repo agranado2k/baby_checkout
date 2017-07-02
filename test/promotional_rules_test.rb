@@ -14,7 +14,7 @@ class PromotionalRulesTest < Minitest::Test
     prs = PromotionalRules.new([{rule: "basket", type: "percentage", property: "value", value_over: 60, discount: 10},
                                 {rule: "item", type: "absolute", property: "quantity", item_id: "001", quantity_over: 2, discount: 0.75}])
 
-    items_after_rule = prs.item_promotional_rules(items)
+    items_after_rule = prs.update_item_value_by_rules(items)
 
     assert_equal items_after_rule, [{id: "001", name: "Lavender heart", value: 8.50},
                                     {id: "001", name: "Lavender heart", value: 8.50}]
@@ -25,7 +25,7 @@ class PromotionalRulesTest < Minitest::Test
     prs = PromotionalRules.new([{rule: "basket", type: "percentage", property: "value", value_over: 60, discount: 10},
                                 {rule: "item", type: "absolute", property: "quantity", item_id: "001", quantity_over: 2, discount: 0.75}])
 
-    total_after_rule = prs.basket_promotional_rules(total_value)
+    total_after_rule = prs.update_basket_value_by_rules(total_value)
 
     assert_equal total_after_rule, 58.46
   end

@@ -5,30 +5,19 @@ class PromotionalRules
     @promotional_rules = promotional_rules
   end
 
-  def item_promotional_rules(items)
-    promotional_rules.select{|r|r[:rule] == "item"}.each do |promotional_rule|
-
-      items.each do |item|
-        quantity = items.select{|item| item[:id] == promotional_rule[:item_id]}.size
-        if item[:id] == promotional_rule[:item_id] && quantity >= promotional_rule[:quantity_over]
-          item[:value] = calculate(item[:value], promotional_rule)
-        end
+  def update_item_value_by_rules(items)
+    items.each do |item|
+      promotional_rules.select{|r|r[:rule] == "item" && applicable?(r, items, item)}.each do |pr|
+        item[:value] = calculate(item[:value], pr)
       end
     end
 
     items
   end
 
-  def basket_promotional_rules(total)
-    tmp_total = total
-    promotional_rules.select{|r|r[:rule] == "basket"}.each do |promotional_rule|
-      if total >= promotional_rule[:value_over]
-        tmp_total = calculate(total, promotional_rule)
-      end
-    end
-    total = tmp_total
-
-    total
+  def update_basket_value_by_rules(total)
+    promotional_rules.select{|r| r[:rule] == "basket" && applicable?(r, total, nil)}
+      .reduce(total){|final_total, pr| calculate(total, pr)}
   end
 
   def calculate(value, pr)
@@ -36,6 +25,15 @@ class PromotionalRules
       (value - (value*pr[:discount]/100.00)).round(2)
     else
       (value - pr[:discount]).round(2)
+    end
+  end
+
+  def applicable?(pr, value, object)
+    if pr[:rule] == "item"
+      quantity = value.select{|i|i[:id] == pr[:item_id]}.size
+      object[:id] == pr[:item_id] && quantity >= pr[:quantity_over]
+    else
+      value >= pr[:value_over]
     end
   end
 end
