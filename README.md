@@ -1,3 +1,12 @@
+# Run Test
+
+You can run the test executing <strong>rake</strong>.
+In <strong>coverage</strong> there is the coverage report.
+Also you can execute the <strong>flog</strong> (<strong>find lib -name \*.rb | xargs flog</strong>) and <strong>flay</strong> (<strong>lay lib/*.rb</strong>) analisis. For more check (http://ruby.sadi.st/Ruby_Sadist.html)
+
+
+### Brief
+
 Our client is an online marketplace, here is a sample of some of the products available on our site:
 Product code  | Name                   | Price
 ----------------------------------------------------------
@@ -28,3 +37,7 @@ Total price expected: £36.95
 
 Basket: 001,002,001,003
 Total price expected: £73.76
+
+
+
+*
