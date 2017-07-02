@@ -13,14 +13,14 @@ class PromotionalRules
 
   def update_item_value_by_rules(item, quantity)
     item_rules.select{|r| applicable?(r, quantity)}.each do |pr|
-      item[:value] = calculator.for(item[:value], pr).execute
+      item[:value] = calculator.for(item[:value], pr[:discount], pr[:type]).execute
     end
     item
   end
 
   def update_basket_value_by_rules(total)
     basket_rules.select{|r| applicable?(r, total)}
-      .reduce(total){|final_total, pr| calculator.for(total, pr).execute }
+      .reduce(total){|final_total, pr| calculator.for(total, pr[:discount], pr[:type]).execute }
   end
 
   def applicable?(pr, value)

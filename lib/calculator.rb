@@ -1,16 +1,16 @@
 class Calculator
-  attr_accessor :promotional_rule, :value
+  attr_accessor :discount, :value
   
-  def initialize(value, pr)
+  def initialize(value, discount)
     @value = value
-    @promotional_rule = pr
+    @discount = discount
   end
 
-  def self.for(value, pr)
-    if pr[:type] == "percentage"
-      Calculators::Percentage.new(value, pr)
+  def self.for(value, discount, type)
+    if type == "percentage"
+      Calculators::Percentage.new(value, discount)
     else
-      Calculators::Absolute.new(value, pr)
+      Calculators::Absolute.new(value, discount)
     end
   end
 end
